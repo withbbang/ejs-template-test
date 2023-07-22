@@ -1,5 +1,9 @@
 "use strict";
 
+document.getElementById("input").addEventListener("keyup", function (e) {
+  e.key === "Enter" && handleSend();
+});
+
 function handleSend() {
   const input = document.getElementById("input").value;
 

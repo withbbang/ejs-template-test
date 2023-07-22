@@ -10,7 +10,7 @@ const llama = new LLM(LLamaCpp);
 
 await llama.load({
   modelPath:
-    "models/airoboros-13b-gpt4-GGML/airoboros-13b-gpt4.ggmlv3.q5_1.bin",
+    "models/GPT4All-13B-snoozy-GGML/GPT4All-13B-snoozy.ggmlv3.q5_0.bin",
   enableLogging: false,
   nCtx: 1024,
   seed: 0,
@@ -50,7 +50,7 @@ app.post("/llama2", async (req: Request, res: Response) => {
   };
 
   await llama.createCompletion(options, (response) => {
-    res.write(response.token);
+    process.stdout.write(response.token);
   });
   res.end();
 });
