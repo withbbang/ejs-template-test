@@ -9,7 +9,8 @@ const PORT: number = 4000;
 const llama = new LLM(LLamaCpp);
 
 await llama.load({
-  modelPath: "models/Llama-2-13b-hf",
+  modelPath:
+    "models/airoboros-13b-gpt4-GGML/airoboros-13b-gpt4.ggmlv3.q5_1.bin",
   enableLogging: false,
   nCtx: 1024,
   seed: 0,
@@ -35,9 +36,23 @@ app.get("/llama2", (req: Request, res: Response) => {
   res.render("llama2");
 });
 
-app.post("/llama2", (req: Request, res: Response) => {
-  console.log(req.body);
-  res.json({ key: "llama2" });
+app.post("/llama2", async (req: Request, res: Response) => {
+  const { input } = req.body;
+
+  const options = {
+    prompt: input,
+    nThreads: 2,
+    nTokPredict: 1024,
+    topK: 40,
+    topP: 0.1,
+    temp: 0.3,
+    repeatPenalty: 1,
+  };
+
+  await llama.createCompletion(options, (response) => {
+    res.write(response.token);
+  });
+  res.end();
 });
 
 server.listen(PORT || 3000, () => {
