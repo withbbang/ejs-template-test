@@ -1,23 +1,44 @@
 "use strict";
 
-document.getElementById("input").addEventListener("keyup", function (e) {
+const input = document.getElementById("input");
+const p = document.getElementById("p");
+
+input.addEventListener("keyup", function (e) {
   e.key === "Enter" && handleSend();
 });
 
 function handleSend() {
-  const input = document.getElementById("input").value;
+  const value = input.value;
 
-  if (!input) return;
+  if (!value) return;
 
-  const data = { input };
+  const data = { value };
 
   fetch("/llama2", {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
+    body: JSON.stringify(data),
   })
-    .then((response) => response.json())
-    .then((result) => console.log(result));
+    .then((response) => {
+      const reader = response.body.getReader();
+      p.innerText = "";
+
+      function processChunk({ done, value }) {
+        const token = new TextDecoder("utf-8").decode(value);
+
+        if (token.includes("<end>")) return;
+        if (done) return;
+
+        p.innerText += token;
+
+        return reader.read().then(processChunk);
+      }
+
+      reader.read().then(processChunk);
+    })
+    .finally(() => {
+      input.value = "";
+    });
 }

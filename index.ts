@@ -37,10 +37,12 @@ app.get("/llama2", (req: Request, res: Response) => {
 });
 
 app.post("/llama2", async (req: Request, res: Response) => {
-  const { input } = req.body;
+  const { value } = req.body;
+
+  res.setHeader("Transfer-Encoding", "chunked");
 
   const options = {
-    prompt: input,
+    prompt: value,
     nThreads: 2,
     nTokPredict: 1024,
     topK: 40,
@@ -50,8 +52,9 @@ app.post("/llama2", async (req: Request, res: Response) => {
   };
 
   await llama.createCompletion(options, (response) => {
-    process.stdout.write(response.token);
+    res.write(response.token);
   });
+
   res.end();
 });
 
