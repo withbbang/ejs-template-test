@@ -9,8 +9,7 @@ const PORT: number = 4000;
 const llama = new LLM(LLamaCpp);
 
 await llama.load({
-  modelPath:
-    "models/GPT4All-13B-snoozy-GGML/GPT4All-13B-snoozy.ggmlv3.q5_0.bin",
+  modelPath: "models/Llama-2-13B-chat-GGML/llama-2-13b-chat.ggmlv3.q4_1.bin",
   enableLogging: false,
   nCtx: 1024,
   seed: 0,
