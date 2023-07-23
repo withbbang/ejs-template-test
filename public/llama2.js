@@ -25,20 +25,20 @@ function handleSend() {
       const reader = response.body.getReader();
       p.innerText = "";
 
-      function processChunk({ done, value }) {
-        const token = new TextDecoder("utf-8").decode(value);
-
-        if (token.includes("<end>")) return;
-        if (done) return;
-
-        p.innerText += token;
-
-        return reader.read().then(processChunk);
-      }
-
-      reader.read().then(processChunk);
+      reader.read().then(handleProcessChunk);
     })
     .finally(() => {
       input.value = "";
     });
+}
+
+function handleProcessChunk({ done, value }) {
+  const token = new TextDecoder("utf-8").decode(value);
+
+  if (done) return;
+  if (token.includes("<end>")) return;
+
+  p.innerText += token;
+
+  return reader.read().then(handleProcessChunk);
 }
