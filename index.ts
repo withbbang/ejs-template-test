@@ -8,20 +8,6 @@ const server: Server = http.createServer(app);
 const PORT: number = 4000;
 const llama = new LLM(LLamaCpp);
 
-await llama.load({
-  modelPath: "models/Llama-2-13B-chat-GGML/llama-2-13b-chat.ggmlv3.q4_1.bin",
-  enableLogging: false,
-  nCtx: 1024,
-  seed: 0,
-  f16Kv: false,
-  logitsAll: false,
-  vocabOnly: false,
-  useMlock: false,
-  embedding: false,
-  useMmap: true,
-  nGpuLayers: 0,
-});
-
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.json());
@@ -39,7 +25,21 @@ app.get("/css", (req: Request, res: Response) => {
   res.render("css");
 });
 
-app.get("/llama2", (req: Request, res: Response) => {
+app.get("/llama2", async (req: Request, res: Response) => {
+  await llama.load({
+    modelPath: "models/Llama-2-13B-chat-GGML/llama-2-13b-chat.ggmlv3.q4_1.bin",
+    enableLogging: false,
+    nCtx: 1024,
+    seed: 0,
+    f16Kv: false,
+    logitsAll: false,
+    vocabOnly: false,
+    useMlock: false,
+    embedding: false,
+    useMmap: true,
+    nGpuLayers: 0,
+  });
+
   res.render("llama2");
 });
 
