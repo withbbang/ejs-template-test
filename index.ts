@@ -31,6 +31,14 @@ app.get("/", (req: Request, res: Response) => {
   res.render("index");
 });
 
+app.get("/naver-map", (req: Request, res: Response) => {
+  res.render("naverMap");
+});
+
+app.get("/css", (req: Request, res: Response) => {
+  res.render("css");
+});
+
 app.get("/llama2", (req: Request, res: Response) => {
   res.render("llama2");
 });

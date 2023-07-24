@@ -9,6 +9,8 @@
 ### 제공하는 기능
 
 - llama-node를 이용하여 대화형 챗봇 기능
+- 대표적인 Naver Map Api 기능
+- CSS Card Flip Animation 기능
 
 ---
 
@@ -45,5 +47,7 @@ EJS-Template-Test
 ### 테스트 하고 있는 것들
 
 1. 대화용 챗봇
+2. Naver Map Api
+3. CSS Card Flip Animation
 
 ---
